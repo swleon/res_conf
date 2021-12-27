@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haibao.resconf.mapper.ResourceentryrecordMapper">
+
+    <resultMap type="Resourceentryrecord" id="ResourceentryrecordResult">
+        <result property="id"    column="id"    />
+        <result property="resourceId"    column="resourceId"    />
+        <result property="status"    column="status"    />
+        <result property="startTime"    column="startTime"    />
+        <result property="endTime"    column="endTime"    />
+        <result property="metaName"    column="metaName"    />
+        <result property="metaValue"    column="metaValue"    />
+        <result property="sort"    column="sort"    />
+        <result property="extend"    column="extend"    />
+        <result property="term"    column="term"    />
+        <result property="strategy"    column="strategy"    />
+        <result property="strategyValue"    column="strategyValue"    />
+        <result property="type"    column="type"    />
+        <result property="created"    column="created"    />
+        <result property="updated"    column="updated"    />
+        <result property="isDeleted"    column="isDeleted"    />
+        <result property="siteCode"    column="siteCode"    />
+        <result property="siteName"    column="siteName"    />
+        <result property="creater"    column="creater"    />
+        <result property="updater"    column="updater"    />
+        <result property="depart"    column="depart"    />
+        <result property="describer"    column="describer"    />
+    </resultMap>
+
+    <sql id="selectResourceentryrecordVo">
+        select id, resourceId, status, startTime, endTime, metaName,
+               metaValue, sort, extend, term, strategy, strategyValue,
+               `type`, created, updated, isDeleted, siteCode, siteName,
+               creater,updater,depart,describer
+        from resourceentryrecord
+    </sql>
+
+    <select id="selectResourceentryrecordList"
+            parameterType="Resourceentryrecord"
+            resultMap="ResourceentryrecordResult">
+        <include refid="selectResourceentryrecordVo"/>
+        <where>
+            <if test="resourceId != null  and resourceId != ''"> and resourceId = #{resourceId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="startTime != null  and startTime != ''"> and startTime = #{startTime}</if>
+            <if test="endTime != null  and endTime != ''"> and endTime = #{endTime}</if>
+            <if test="metaName != null  and metaName != ''"> and metaName like concat('%', #{metaName}, '%')</if>
+            <if test="metaValue != null  and metaValue != ''"> and metaValue = #{metaValue}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+            <if test="extend != null  and extend != ''"> and extend = #{extend}</if>
+            <if test="term != null  and term != ''"> and term = #{term}</if>
+            <if test="strategy != null  and strategy != ''"> and strategy = #{strategy}</if>
+            <if test="strategyValue != null  and strategyValue != ''"> and strategyValue = #{strategyValue}</if>
+            <if test="type != null "> and `type` = #{type}</if>
+            <if test="created != null  and created != ''"> and created = #{created}</if>
+            <if test="updated != null  and updated != ''"> and updated = #{updated}</if>
+            <if test="creater != null  and creater != ''"> and creater = #{creater}</if>
+            <if test="updater != null  and updater != ''"> and updater = #{updater}</if>
+            <if test="depart != null  and depart != ''"> and depart = #{depart}</if>
+            <if test="describer != null  and describer != ''"> and describer = #{describer}</if>
+            <if test="isDeleted != null"> and isDeleted = #{isDeleted}</if>
+            <if test="siteCode != null  and siteCode != ''"> and siteCode = #{siteCode}</if>
+            <if test="siteName != null  and siteName != ''"> and siteName = #{siteName}</if>
+            <if test="termOfValidity != null  and termOfValidity > 0">
+                and  unix_timestamp(now()) <![CDATA[ >= ]]> startTime
+                and  unix_timestamp(now()) <![CDATA[ <= ]]> endTime
+            </if>
+        </where>
+
+        order by sort
+    </select>
+
+    <select id="selectResourceentryrecordById" parameterType="Long" resultMap="ResourceentryrecordResult">
+        <include refid="selectResourceentryrecordVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="getCountByResourceIds" resultType="java.lang.Long">
+        select count(1) from resourceentryrecord
+        where  status = #{status} and resourceId in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertResourceentryrecord" parameterType="Resourceentryrecord" useGeneratedKeys="true" keyProperty="id">
+        insert into resourceentryrecord
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">resourceId,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="startTime != null and startTime != ''">startTime,</if>
+            <if test="endTime != null and endTime != ''">endTime,</if>
+            <if test="metaName != null">metaName,</if>
+            <if test="metaValue != null">metaValue,</if>
+            <if test="sort != null">sort,</if>
+            <if test="extend != null">extend,</if>
+            <if test="term != null">term,</if>
+            <if test="strategy != null">strategy,</if>
+            <if test="strategyValue != null">strategyValue,</if>
+            <if test="type != null">`type`,</if>
+            <if test="created != null">created,</if>
+            <if test="updated != null">updated,</if>
+            <if test="isDeleted != null">isDeleted,</if>
+            <if test="siteCode != null and siteCode != ''">siteCode,</if>
+            <if test="siteName != null and siteName != ''">siteName,</if>
+            <if test="creater != null  and creater != ''">creater,</if>
+            <if test="updater != null  and updater != ''">updater,</if>
+            <if test="depart != null  and depart != ''">depart</if>
+            <if test="describer != null  and describer != ''"> describer</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">#{resourceId},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="startTime != null and startTime != ''">#{startTime},</if>
+            <if test="endTime != null and endTime != ''">#{endTime},</if>
+            <if test="metaName != null">#{metaName},</if>
+            <if test="metaValue != null">#{metaValue},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="extend != null">#{extend},</if>
+            <if test="term != null">#{term},</if>
+            <if test="strategy != null">#{strategy},</if>
+            <if test="strategyValue != null">#{strategyValue},</if>
+            <if test="type != null">#{type},</if>
+            <if test="created != null and created != ''">#{created},</if>
+            <if test="updated != null and updated != ''">#{updated},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="siteCode != null and siteCode != ''">#{siteCode},</if>
+            <if test="siteName != null and siteName != ''">#{siteName},</if>
+            <if test="creater != null  and creater != ''"> #{creater},</if>
+            <if test="updater != null  and updater != ''"> #{updater},</if>
+            <if test="depart != null  and depart != ''"> #{depart},</if>
+            <if test="describer != null  and describer != ''"> #{describer},</if>
+        </trim>
+    </insert>
+
+    <update id="updateResourceentryrecord" parameterType="Resourceentryrecord">
+        update resourceentryrecord
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resourceId != null">resourceId = #{resourceId},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="startTime != null and startTime != ''">startTime = #{startTime},</if>
+            <if test="endTime != null and endTime != ''">endTime = #{endTime},</if>
+            <if test="metaName != null">metaName = #{metaName},</if>
+            <if test="metaValue != null">metaValue = #{metaValue},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="extend != null">extend = #{extend},</if>
+            <if test="term != null">term = #{term},</if>
+            <if test="strategy != null">strategy = #{strategy},</if>
+            <if test="strategyValue != null">strategyValue = #{strategyValue},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="created != null and created != ''">created = #{created},</if>
+            <if test="updated != null and updated != ''">updated = #{updated},</if>
+            <if test="isDeleted != null">isDeleted = #{isDeleted},</if>
+            <if test="siteCode != null and siteCode != ''">siteCode = #{siteCode},</if>
+            <if test="siteName != null and siteName != ''">siteName = #{siteName},</if>
+            <if test="creater != null  and creater != ''">creater = #{creater},</if>
+            <if test="updater != null  and updater != ''">updater = #{updater},</if>
+            <if test="depart != null  and depart != ''">depart = #{depart},</if>
+            <if test="describer != null  and describer != ''">describer = #{describer},</if>
+
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResourceentryrecordById" parameterType="Long">
+        delete from resourceentryrecord where id = #{id}
+    </delete>
+
+    <delete id="deleteResourceentryrecordByIds" parameterType="String">
+        delete from resourceentryrecord where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteResourceconfigByResourceIds" parameterType="String">
+        delete from resourceentryrecord where resourceId in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="logicRemoveResourceconfigByResourceIds" parameterType="String">
+        update resourceentryrecord
+        set isDeleted = 1, updated = unix_timestamp(now())
+        where resourceId in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="updateResourceentryrecordStatusBatchByIds" parameterType="java.util.Map">
+        update resourceentryrecord
+        set status = #{status} , updated = unix_timestamp(now())
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id,jdbcType=INTEGER}
+        </foreach>
+    </update>
+
+
+</mapper>

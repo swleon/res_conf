@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haibao.resconf.mapper.ResourceconfigMapper">
+
+    <resultMap type="Resourceconfig" id="ResourceconfigResult">
+        <result property="id"    column="id"    />
+        <result property="resourceId"    column="resourceId"    />
+        <result property="metaKey"    column="metaKey"    />
+        <result property="metaName"    column="metaName"    />
+        <result property="dataType"    column="dataType"    />
+        <result property="metaValue"    column="metaValue"    />
+        <result property="required"    column="required"    />
+        <result property="editable"    column="editable"    />
+        <result property="sort"    column="sort"    />
+        <result property="metaTips"    column="metaTips"    />
+        <result property="defaultValue"    column="defaultValue"    />
+        <result property="created"    column="created"    />
+        <result property="updated"    column="updated"    />
+        <result property="isDeleted"    column="isDeleted"    />
+        <result property="creater"    column="creater"    />
+        <result property="updater"    column="updater"    />
+        <result property="depart"    column="depart"    />
+    </resultMap>
+
+    <sql id="selectResourceconfigVo">
+        select id, resourceId, metaKey, metaName, dataType, metaValue,
+               required, editable, sort, metaTips, defaultValue, created, updated,
+               isDeleted,creater,updater,depart
+        from resourceconfig
+    </sql>
+
+    <select id="selectResourceconfigList" parameterType="Resourceconfig" resultMap="ResourceconfigResult">
+        <include refid="selectResourceconfigVo"/>
+        <where>
+            <if test="resourceId != null "> and resourceId = #{resourceId}</if>
+            <if test="metaKey != null  and metaKey != ''"> and metaKey = #{metaKey}</if>
+            <if test="metaName != null  and metaName != ''"> and metaName like concat('%', #{metaName}, '%')</if>
+            <if test="dataType != null "> and dataType = #{dataType}</if>
+            <if test="metaValue != null  and metaValue != ''"> and metaValue = #{metaValue}</if>
+            <if test="required != null  and required != ''"> and required = #{required}</if>
+            <if test="editable != null  and editable != ''"> and editable = #{editable}</if>
+            <if test="sort != null  and sort != ''"> and sort = #{sort}</if>
+            <if test="metaTips != null  and metaTips != ''"> and metaTips = #{metaTips}</if>
+            <if test="defaultValue != null  and defaultValue != ''"> and defaultValue = #{defaultValue}</if>
+            <if test="created != null  and created != ''"> and created = #{created}</if>
+<!--            <if test="updated != null "> and updated = #{updated}</if>-->
+<!--            <if test="creater != null  and creater != ''"> and creater = #{creater}</if>-->
+            <if test="updater != null  and updater != ''"> and updater = #{updater}</if>
+            <if test="depart != null  and depart != ''"> and depart = #{depart}</if>
+            <if test="isDeleted != null "> and isDeleted = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectResourceconfigById" parameterType="Long" resultMap="ResourceconfigResult">
+        <include refid="selectResourceconfigVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertResourceconfig" parameterType="Resourceconfig" useGeneratedKeys="true" keyProperty="id">
+        insert into resourceconfig
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">resourceId,</if>
+            <if test="metaKey != null and metaKey != ''">metaKey,</if>
+            <if test="metaName != null and metaName != ''">metaName,</if>
+            <if test="dataType != null">dataType,</if>
+            <if test="metaValue != null">metaValue,</if>
+            <if test="required != null and required != ''">required,</if>
+            <if test="editable != null and editable != ''">editable,</if>
+            <if test="sort != null and sort != ''">sort,</if>
+            <if test="metaTips != null">metaTips,</if>
+            <if test="defaultValue != null">defaultValue,</if>
+            <if test="created != null and created != ''">created,</if>
+            <if test="updated != null">updated,</if>
+            <if test="isDeleted != null">isDeleted,</if>
+            <if test="creater != null  and creater != ''">creater,</if>
+            <if test="updater != null  and updater != ''">updater,</if>
+            <if test="depart != null  and depart != ''">depart</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resourceId != null">#{resourceId},</if>
+            <if test="metaKey != null and metaKey != ''">#{metaKey},</if>
+            <if test="metaName != null and metaName != ''">#{metaName},</if>
+            <if test="dataType != null">#{dataType},</if>
+            <if test="metaValue != null">#{metaValue},</if>
+            <if test="required != null and required != ''">#{required},</if>
+            <if test="editable != null and editable != ''">#{editable},</if>
+            <if test="sort != null and sort != ''">#{sort},</if>
+            <if test="metaTips != null">#{metaTips},</if>
+            <if test="defaultValue != null">#{defaultValue},</if>
+            <if test="created != null and created != ''">#{created},</if>
+            <if test="updated != null">#{updated},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="creater != null  and creater != ''"> #{creater},</if>
+            <if test="updater != null  and updater != ''"> #{updater},</if>
+            <if test="depart != null  and depart != ''"> #{depart},</if>
+         </trim>
+    </insert>
+
+    <update id="updateResourceconfig" parameterType="Resourceconfig">
+        update resourceconfig
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="resourceId != null">resourceId = #{resourceId},</if>
+            <if test="metaKey != null and metaKey != ''">metaKey = #{metaKey},</if>
+            <if test="metaName != null and metaName != ''">metaName = #{metaName},</if>
+            <if test="dataType != null">dataType = #{dataType},</if>
+            <if test="metaValue != null">metaValue = #{metaValue},</if>
+            <if test="required != null and required != ''">required = #{required},</if>
+            <if test="editable != null and editable != ''">editable = #{editable},</if>
+            <if test="sort != null and sort != ''">sort = #{sort},</if>
+            <if test="metaTips != null">metaTips = #{metaTips},</if>
+            <if test="defaultValue != null">defaultValue = #{defaultValue},</if>
+            <if test="created != null and created != ''">created = #{created},</if>
+            <if test="updated != null">updated = #{updated},</if>
+            <if test="isDeleted != null">isDeleted = #{isDeleted},</if>
+            <if test="creater != null  and creater != ''">creater = #{creater},</if>
+            <if test="updater != null  and updater != ''">updater = #{updater},</if>
+            <if test="depart != null  and depart != ''">depart = #{depart},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteResourceconfigById" parameterType="Long">
+        delete from resourceconfig where id = #{id}
+    </delete>
+
+    <delete id="deleteResourceconfigByIds" parameterType="String">
+        delete from resourceconfig where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteResourceconfigByResourceIds" parameterType="String">
+        delete from resourceconfig where resourceId in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="logicRemoveResourceconfigByResourceIds" parameterType="String">
+        update resourceconfig
+        set isDeleted = 1, updated = unix_timestamp(now())
+        where resourceId in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>
