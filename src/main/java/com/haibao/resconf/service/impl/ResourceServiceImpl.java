@@ -66,6 +66,7 @@ public class ResourceServiceImpl implements IResourceService {
      */
     @Override
     public Resourceniche selectResourceById(Long id) {
+
         return resourceMapper.selectResourceById(id);
     }
 
