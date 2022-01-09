@@ -42,26 +42,10 @@
 **请求示例**:
 
 
-```javascript
-{
-  "classify": "",
-  "code": "",
-  "creater": "",
-  "depart": "",
-  "isAsc": "",
-  "isDeleted": 0,
-  "metaValue": "",
-  "name": "",
-  "orderByColumn": "",
-  "pageNum": 0,
-  "pageSize": 0,
-  "platformCode": "",
-  "platformName": "",
-  "searchYourself": 0,
-  "siteCode": "",
-  "siteName": "",
-  "strategy": "",
-  "updater": ""
+```json
+ {
+    "platformCode": "xxx", 
+    "classify":"pc#index#banner" 
 }
 ```
 
@@ -69,27 +53,27 @@
 **请求参数**:
 
 
-| 参数名称                   | 参数说明           | 请求类型 | 是否必须 | 数据类型           | schema             |
-| -------------------------- | ------------------ | -------- | -------- | ------------------ | ------------------ |
-| resourcenicheQuery         | ResourcenicheQuery | body     | true     | ResourcenicheQuery | ResourcenicheQuery |
-| &emsp;&emsp;classify       |                    |          | false    | string             |                    |
-| &emsp;&emsp;code           |                    |          | false    | string             |                    |
-| &emsp;&emsp;creater        |                    |          | false    | string             |                    |
-| &emsp;&emsp;depart         |                    |          | false    | string             |                    |
-| &emsp;&emsp;isAsc          |                    |          | false    | string             |                    |
-| &emsp;&emsp;isDeleted      |                    |          | false    | integer(int32)     |                    |
-| &emsp;&emsp;metaValue      |                    |          | false    | string             |                    |
-| &emsp;&emsp;name           |                    |          | false    | string             |                    |
-| &emsp;&emsp;orderByColumn  |                    |          | false    | string             |                    |
-| &emsp;&emsp;pageNum        |                    |          | false    | integer(int32)     |                    |
-| &emsp;&emsp;pageSize       |                    |          | false    | integer(int32)     |                    |
-| &emsp;&emsp;platformCode   |                    |          | false    | string             |                    |
-| &emsp;&emsp;platformName   |                    |          | false    | string             |                    |
-| &emsp;&emsp;searchYourself |                    |          | false    | integer(int32)     |                    |
-| &emsp;&emsp;siteCode       |                    |          | false    | string             |                    |
-| &emsp;&emsp;siteName       |                    |          | false    | string             |                    |
-| &emsp;&emsp;strategy       |                    |          | false    | string             |                    |
-| &emsp;&emsp;updater        |                    |          | false    | string             |                    |
+| 参数名称                   | 参数说明                                        | 请求类型 | 是否必须                        | 数据类型           | schema             |
+| -------------------------- | ----------------------------------------------- | -------- | ------------------------------- | ------------------ | ------------------ |
+| resourcenicheQuery         | ResourcenicheQuery                              | body     | true                            | ResourcenicheQuery | ResourcenicheQuery |
+| &emsp;&emsp;classify       | 分类标识                                        |          | false. 可选（与code 必选⼀ 个） | string             |                    |
+| &emsp;&emsp;code           | 唯⼀码                                          |          | false                           | string             |                    |
+| &emsp;&emsp;creater        |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;depart         |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;isAsc          |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;isDeleted      |                                                 |          | false                           | integer(int32)     |                    |
+| &emsp;&emsp;metaValue      |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;name           | 资源位名字                                      |          | false                           | string             |                    |
+| &emsp;&emsp;orderByColumn  |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;pageNum        |                                                 |          | false                           | integer(int32)     |                    |
+| &emsp;&emsp;pageSize       |                                                 |          | false                           | integer(int32)     |                    |
+| &emsp;&emsp;platformCode   | 平台code标识                                    |          | false                           | string             |                    |
+| &emsp;&emsp;platformName   | 平台名称                                        |          | false                           | string             |                    |
+| &emsp;&emsp;searchYourself |                                                 |          | false                           | integer(int32)     |                    |
+| &emsp;&emsp;siteCode       | 站点code标识，主要⽤于过滤素 材，只查询特定站点 |          | false                           | string             |                    |
+| &emsp;&emsp;siteName       |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;strategy       |                                                 |          | false                           | string             |                    |
+| &emsp;&emsp;updater        |                                                 |          | false                           | string             |                    |
 
 
 **响应状态**:
@@ -117,12 +101,120 @@
 
 **响应示例**:
 
-```javascript
+dataType 枚举： 数据类型 
+ - 0数字
+ - 1⽂案
+ - 2时间戳
+ - 3图⽚链接
+ - 4跳转链接
+ - 5视频链接
+ - 6单选
+ - 7多选
+ - 8下拉列表
+ - 9颜⾊
+ - 10 前端专⽤-外置参数
+
+```json
 {
-	"code": "",
-	"msg": "",
-	"success": true,
-	"value": {}
+    "success":true,
+    "code":"1001",
+    "msg":"Request succeeded.",
+    "value":{
+        "code":"51a6e741-1055-11ec-bc0d-50eb7130f46c",
+        "name":"sitename_index_banner",
+        "platformCode":"sitename",
+        "platformName":"sitename platform",
+        "classify":"sitename#pc#index#banner",
+        "configs":[
+            {
+                "metaKey":"param",
+                "metaName":"外置参数",
+                "dataType":10,
+                "metaTips":"parms",
+                "defaultValue":""
+            },
+            {
+                "metaKey":"pic_url",
+                "metaName":"图⽚链接",
+                "dataType":3,
+                "metaTips":"image link"
+            }
+        ],
+        "records":[
+            {
+                "id":13,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3508&siteCode=patpat",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_8bdada4e01af49 7e83ec691911570148_1144x100.png"
+                },
+                "siteCode":"patpat",
+                "siteName":"patpat",
+                "acm":"3.orca.101_41_12a.2..a2yPZsIuFLddt.sd_1"
+            },
+            {
+                "id":12,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3543&siteCode=olikefit",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_368ad46c60a247 ea8d768cfd1514c9ee_1144x100.png"
+                },
+                "siteCode":"olikefit",
+                "siteName":"olikefit",
+                "acm":"3.orca.101_41_128.2..a2yPZsIuFLddu.sd_1"
+            },
+            {
+                "id":11,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3537&siteCode=Minihug",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_21f5ab3af8cb441 1a9b773ff095f93b5_1154x100.png"
+                },
+                "siteCode":"minihug",
+                "siteName":"minihug",
+                "acm":"3.orca.101_41_126.2..a2yPZsIuFLddv.sd_1"
+            },
+            {
+                "id":10,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3538&siteCode=Mary",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_3e0382ddc6914f7 4806aea188f6710cc_1144x100.png"
+                },
+                "siteCode":"mary",
+                "siteName":"mary",
+                "acm":"3.orca.101_41_124.2..a2yPZsIuFLddw.sd_1"
+            },
+            {
+                "id":9,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3516&siteCode=Kalavia",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_3cbd5cc91d8a44 8fa5d63c6e8e5305c0_1154x100.png"
+                },
+                "siteCode":"kalavia",
+                "siteName":"kalavia",
+                "acm":"3.orca.101_41_122.2..a2yPZsIuFLddx.sd_1"
+            },
+            {
+                "id":2,
+                "resourceId":2,
+                "metaValue":"",
+                "metaJsonValue":{
+                    "param":"sourceSite=3541&siteCode=hallowshack",
+                    "pic_url":"https://sitename-image.azureedge.net/08092021_9bcf90f7afff4d6a bbbd0343472d33a5_1144x100.png"
+                },
+                "siteCode":"hallowshack",
+                "siteName":"hallowshack",
+                "acm":"3.orca.101_41_11o.2..a2yPZsIuFLddy.sd_1"
+            }
+        ]
+    }
 }
 ```
 
@@ -1525,5 +1617,4 @@
 	"value": {}
 }
 ```
-
 
