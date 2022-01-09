@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wuque
@@ -24,26 +25,28 @@ public class CacheServiceImpl implements ICacheService {
 
     @Override
     public void scanAndDelete(CacheMetaEnum cacheResource, String cachePattern) {
-
+        redisCache.scanAndDelete(cacheResource.buildKey(cachePattern));
     }
 
     @Override
     public void scanAndDeletePipelined(String buildKey) {
-
+        redisCache.scanAndDeletePipelined(buildKey);
     }
 
     @Override
     public boolean exists(CacheMetaEnum cacheResource, String cacheKey) {
-        return false;
+
+        return redisCache.exists(cacheResource.buildKey(cacheKey));
     }
 
     @Override
     public String get(CacheMetaEnum cacheResource, String cacheKey) {
-        return null;
+
+        return redisCache.getCacheObject(cacheResource.buildKey(cacheKey));
     }
 
     @Override
-    public void set(CacheMetaEnum cacheResource, String cacheKey, String gsonString) {
-
+    public void set(CacheMetaEnum cacheResource, String cacheKey, String value) {
+        redisCache.setCacheObject(cacheResource.buildKey(cacheKey),value,cacheResource.getExpire(), TimeUnit.MINUTES);
     }
 }

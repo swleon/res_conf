@@ -1,12 +1,14 @@
 package com.haibao.resconf.common.redis;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author wuque
  **/
 @SuppressWarnings(value = { "unchecked", "rawtypes" })
+@Slf4j
 @Component
 public class RedisCache
 {
@@ -240,4 +243,95 @@ public class RedisCache
     {
         return redisTemplate.keys(pattern);
     }
+
+    /**
+     * 判断key是否存在
+     * @param key
+     * @return
+     */
+    public boolean exists(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+    /**
+     * 根据前缀删除
+     *
+     * @param pattern       前缀
+     * @return
+     */
+    public Long scanAndDelete(String pattern) {
+        Set<String> scan = scan(pattern);
+        String[] array = scan.toArray(new String[scan.size()]);
+        return redisTemplate.delete((Collection<String>) CollectionUtils.arrayToList(array));
+    }
+
+    /**
+     * 匹配 key
+     *
+     * @param matchKey
+     * @return
+     */
+    public Set<String> scan(String matchKey) {
+        Set<String> keys = (Set<String>) redisTemplate.execute((RedisCallback<Set<String>>) connection -> {
+            Set<String> keysTmp = new HashSet<>();
+            Cursor<byte[]> cursor = connection.scan(new ScanOptions.ScanOptionsBuilder().match("*" + matchKey + "*").count(1000).build());
+            while (cursor.hasNext()) {
+                keysTmp.add(new String(cursor.next()));
+            }
+            return keysTmp;
+        });
+        return keys;
+    }
+
+
+    /**
+     * 扫描并删除
+     *
+     * @param pattern
+     * @return
+     */
+    public long scanAndDeletePipelined(String pattern) {
+        long start = System.currentTimeMillis();
+        long cursorId = (long) redisTemplate.execute((RedisConnection connection) -> {
+            //这里传了count的值不管用，依然会遍历出所有符合条件的key
+            try (Cursor<byte[]> cursor = connection.scan(ScanOptions.scanOptions().match("*" + pattern + "*").build())) {
+                ArrayList<String> list = new ArrayList<>();
+                while (cursor.hasNext()) {
+                    list.add(new String(cursor.next(), StandardCharsets.UTF_8));
+                    if (list.size() == 10000) {
+                        //批量删除
+                        this.executeDeletePipelined(list);
+                        list = new ArrayList<>();
+                    }
+                }
+                if (list.size() > 0) {
+                    //批量删除
+                    this.executeDeletePipelined(list);
+                }
+                return cursor.getCursorId();
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e);
+            }
+        });
+        log.info("本次删除耗时={}", System.currentTimeMillis() - start);
+        return cursorId;
+    }
+
+    /**
+     * 管道批量删除
+     *
+     * @param keys
+     */
+    public void executeDeletePipelined(List<String> keys) {
+        log.info("删除数量={}", keys.size());
+        RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+        redisTemplate.executePipelined((RedisCallback<String>) connection -> {
+            keys.forEach(key -> {
+                connection.del(serializer.serialize(key));
+            });
+            return null;
+        }, serializer);
+    }
+
 }
