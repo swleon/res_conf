@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
- * 投放中心
+ * 资源位 管理
  * @author wuque
  * @date 2021-09-03
  */

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- *
+ * 资源素材对外API 统一查询接口
  * @author wuque
  * @date 2021-09-03
  */

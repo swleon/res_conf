@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 资源位 素材管理
  * @author wuque
  * @date 2021-09-03
  */
 @Validated
 @RestController
 @RequestMapping("/api/admin/delivery/record")
-@CrossOrigin(originPatterns = {"*.weshop.com*", "*.weshop-inc.com*"}, maxAge = 3600, allowCredentials = "true")
 public class ResourceentryrecordController extends BaseController {
 
     @Autowired
